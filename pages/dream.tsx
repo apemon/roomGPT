@@ -55,6 +55,10 @@ const Home: NextPage = () => {
   const [theme, setTheme] = useState<themeType>("Modern");
   const [room, setRoom] = useState<roomType>("Living Room");
 
+  const HandleThemeChange = (event: any) => {
+    setTheme(event.target.value)
+  }
+
   const UploadDropZone = () => (
     <UploadDropzone
       uploader={uploader}
@@ -75,6 +79,7 @@ const Home: NextPage = () => {
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200)); // TODO: See if I even need this
     setLoading(true);
+    console.log(theme)
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: {
@@ -143,12 +148,19 @@ const Home: NextPage = () => {
                         Choose your room theme.
                       </p>
                     </div>
+                    <input type="text"
+                      className="w-full text-left text-bold text-gray-900"
+                      onChange={HandleThemeChange}>
+
+                    </input>
+                    {/*
                     <DropDown
                       theme={theme}
                       // @ts-ignore
                       setTheme={(newTheme) => setTheme(newTheme)}
                       themes={themes}
                     />
+                    */}
                   </div>
                   <div className="space-y-4 w-full max-w-sm">
                     <div className="flex mt-10 items-center space-x-3">
@@ -191,9 +203,8 @@ const Home: NextPage = () => {
                 </div>
               )}
               <div
-                className={`${
-                  restoredLoaded ? "visible mt-6 -ml-8" : "invisible"
-                }`}
+                className={`${restoredLoaded ? "visible mt-6 -ml-8" : "invisible"
+                  }`}
               >
                 <Toggle
                   className={`${restoredLoaded ? "visible mb-6" : "invisible"}`}
