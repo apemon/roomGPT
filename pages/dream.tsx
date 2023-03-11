@@ -54,6 +54,7 @@ const Home: NextPage = () => {
   const [photoName, setPhotoName] = useState<string | null>(null);
   const [theme, setTheme] = useState<themeType>("Modern");
   const [room, setRoom] = useState<roomType>("Living Room");
+  const [fileUrl, setFileUrl] = useState<string>("");
 
   const HandleThemeChange = (event: any) => {
     setTheme(event.target.value)
@@ -68,6 +69,7 @@ const Home: NextPage = () => {
           setPhotoName(file[0].originalFile.originalFileName);
           // TODO: Make sure these are the image dimensions we want
           setOriginalPhoto(file[0].fileUrl.replace("raw", "thumbnail"));
+          setFileUrl(file[0].fileUrl.replace("raw", "thumbnail"))
           generatePhoto(file[0].fileUrl.replace("raw", "thumbnail"));
         }
       }}
@@ -280,17 +282,27 @@ const Home: NextPage = () => {
               )}
               <div className="flex space-x-2 justify-center">
                 {originalPhoto && !loading && !error && (
-                  <button
-                    onClick={() => {
-                      setOriginalPhoto(null);
-                      setRestoredImage(null);
-                      setRestoredLoaded(false);
-                      setError(null);
-                    }}
-                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
-                  >
-                    Generate New Room
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        setOriginalPhoto(null);
+                        setRestoredImage(null);
+                        setRestoredLoaded(false);
+                        setError(null);
+                      }}
+                      className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
+                    >
+                      Generate New Room
+                    </button>
+                    <button
+                      onClick={() => {
+                        generatePhoto(fileUrl);
+                      }}
+                      className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
+                    >
+                      Generate Another With Same Theme
+                    </button>
+                  </>
                 )}
                 {restoredLoaded && (
                   <button
